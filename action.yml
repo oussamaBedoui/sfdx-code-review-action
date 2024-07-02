@@ -103,7 +103,7 @@ runs:
 
     - name: 'Install Code Scanner'
       shell: bash
-      run: sfdx plugins:install @salesforce/sfdx-scanner
+      run: sfdx plugins:install @salesforce/sfdx-scanner@v3.25.0
 
     - name: 'Run Code Scanner'
       if: ${{ inputs.dfa_setting != 'dfa-only' }}
