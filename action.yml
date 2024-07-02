@@ -1,4 +1,4 @@
-name: 'Pull Request SFDX Code Review'
+name: 'Pull Request SFDX Code Review Node'
 description: 'Uses Salesforce Code Analyzer to create a Pull Request Review including inline Comments'
 inputs:
   source_path:
