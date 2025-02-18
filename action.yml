@@ -94,26 +94,21 @@ runs:
 
     - name: Install Salesforce CLI
       shell: bash
-      run: |
-          wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
-          mkdir ~/sfdx
-          tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
-          echo "$HOME/sfdx/bin" >> $GITHUB_PATH
-          ~/sfdx/bin/sfdx version
+      run: npm install @salesforce/cli --global
 
     - name: 'Install Code Scanner'
       shell: bash
-      run: sfdx plugins:install @salesforce/sfdx-scanner@v3.25.0
+      run: sf plugins install @salesforce/sfdx-scanner@latest
 
     - name: 'Run Code Scanner'
       if: ${{ inputs.dfa_setting != 'dfa-only' }}
       shell: bash
-      run: sfdx scanner:run --target "${{ steps.getdiff.outputs.difflist }}" --category "${{ inputs.category }}" --engine "${{ inputs.engine }}" --eslintconfig "${{ inputs.eslintconfig }}" --pmdconfig "${{ inputs.pmdconfig }}" --tsconfig "${{ inputs.tsconfig }}" --format csv --normalize-severity  > report.csv
+      run: sf scanner run --target "${{ steps.getdiff.outputs.difflist }}" --category "${{ inputs.category }}" --engine "${{ inputs.engine }}" --eslintconfig "${{ inputs.eslintconfig }}" --pmdconfig "${{ inputs.pmdconfig }}" --tsconfig "${{ inputs.tsconfig }}" --format csv --normalize-severity  > report.csv
     
     - name: 'Run Graph Engine'
       if: ${{ inputs.dfa_setting != '' }}
       shell: bash
-      run: sfdx scanner:run:dfa --target "${{ steps.getdiff.outputs.difflist }}" --projectdir "${{ inputs.projectdir }}" --rule-thread-count "${{ inputs.rule_thread_count }}" --rule-thread-timeout "${{ inputs.rule_thread_timeout }}" --format csv --normalize-severity  > dfa-report.csv
+      run: sf scanner run dfa --target "${{ steps.getdiff.outputs.difflist }}" --projectdir "${{ inputs.projectdir }}" --rule-thread-count "${{ inputs.rule_thread_count }}" --rule-thread-timeout "${{ inputs.rule_thread_timeout }}" --format csv --normalize-severity  > dfa-report.csv
 
     - name: 'Convert report to json'
       if: ${{ inputs.dfa_setting != 'dfa-only' }}
